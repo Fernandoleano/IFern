@@ -34,6 +34,7 @@ fn main() -> Result<()> {
     if target_os == "macos" && target_family != "wasm" {
         println!("cargo:rustc-link-lib=framework=MetalKit");
         println!("cargo:rustc-link-lib=framework=UserNotifications");
+        println!("cargo:rustc-link-lib=framework=WebKit");
         build_and_link_sentry();
 
         println!("cargo:rerun-if-changed=src/platform/mac/objc/app_bundle.h");
