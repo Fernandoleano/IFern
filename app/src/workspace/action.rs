@@ -262,6 +262,8 @@ pub enum WorkspaceAction {
     ToggleLeftPanel,
     /// Toggles directly to the Warp Drive tab of the left panel in Code Mode V2
     ToggleWarpDrive,
+    /// Toggles the browser panel in the left panel
+    ToggleBrowser,
     /// Unconditionally opens Warp Drive. This is used in the case of user lifecycle
     /// events like new user onboarding or when the user joins a team.
     OpenWarpDrive,
@@ -833,6 +835,7 @@ impl WorkspaceAction {
             | FinalizeDropTab
             | ToggleLeftPanel
             | ToggleWarpDrive
+            | ToggleBrowser
             | OpenWarpDrive
             | ClosePanel
             | ToggleRightPanel

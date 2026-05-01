@@ -1149,6 +1149,12 @@ pub trait WindowExt {
 
     /// Sets whether or not to show the native macOS window buttons (traffic lights).
     fn set_window_buttons(&self, window_buttons: bool);
+
+    /// Returns the native macOS content `NSView` of the window as an Objective-C
+    /// `id`, or `None` for non-mac windows (e.g. headless or test windows).
+    /// Callers can use this to add native subviews (e.g. `WKWebView`) on top of
+    /// the warpui-rendered surface.
+    fn native_content_view(&self) -> Option<id>;
 }
 
 /// Utility for interacting with the native [`Window`] implementation. The native window is always
@@ -1175,6 +1181,10 @@ impl WindowExt for &dyn platform::Window {
         if let Some(window) = native_window(*self) {
             window.0.set_window_buttons(window_buttons)
         }
+    }
+
+    fn native_content_view(&self) -> Option<id> {
+        native_window(*self).map(|window| window.0.native_view())
     }
 }
 

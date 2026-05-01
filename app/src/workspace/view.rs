@@ -7,6 +7,7 @@ mod crash_recovery;
 pub(crate) mod free_tier_limit_hit_modal;
 pub mod global_search;
 pub(crate) mod launch_modal;
+pub(crate) mod browser_view;
 pub(crate) mod left_panel;
 pub(crate) mod onboarding;
 pub(crate) mod openwarp_launch_modal;
@@ -622,6 +623,8 @@ pub(crate) const LEFT_PANEL_GLOBAL_SEARCH_BINDING_NAME: &str = "workspace:left_p
 pub(crate) const LEFT_PANEL_WARP_DRIVE_BINDING_NAME: &str = "workspace:left_panel_warp_drive";
 pub(crate) const LEFT_PANEL_AGENT_CONVERSATIONS_BINDING_NAME: &str =
     "workspace:left_panel_agent_conversations";
+pub(crate) const LEFT_PANEL_BROWSER_BINDING_NAME: &str = "workspace:left_panel_browser";
+pub(crate) const TOGGLE_BROWSER_BINDING_NAME: &str = "workspace:toggle_browser";
 
 const KEYBINDINGS_TO_CACHE: [&str; 4] = [
     ASK_AI_ASSISTANT_KEYBINDING_NAME,
@@ -16704,6 +16707,7 @@ impl Workspace {
                         ToolPanelView::GlobalSearch { .. } => "Global search",
                         ToolPanelView::WarpDrive => "Warp Drive",
                         ToolPanelView::ConversationListView => "Agent conversations",
+                        ToolPanelView::Browser => "Browser",
                     }
                 } else {
                     "Tools panel"
@@ -16758,6 +16762,7 @@ impl Workspace {
                 ToolPanelView::GlobalSearch { .. } => "Global search",
                 ToolPanelView::WarpDrive => "Warp Drive",
                 ToolPanelView::ConversationListView => "Agent conversations",
+                ToolPanelView::Browser => "Browser",
             }
         } else {
             "Tools panel"
@@ -19658,6 +19663,7 @@ impl Workspace {
         if WarpDriveSettings::is_warp_drive_enabled(ctx) {
             views.push(ToolPanelView::WarpDrive);
         }
+        views.push(ToolPanelView::Browser);
         views
     }
 
@@ -21566,6 +21572,11 @@ impl TypedActionView for Workspace {
                         ctx,
                     );
                 }
+            }
+            ToggleBrowser => {
+                let is_showing =
+                    self.left_panel_view.as_ref(ctx).active_view() == ToolPanelView::Browser;
+                self.toggle_left_panel_view(&LeftPanelAction::Browser, is_showing, ctx);
             }
             ShowRewindConfirmationDialog {
                 ai_block_view_id,
